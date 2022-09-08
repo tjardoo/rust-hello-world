@@ -1,13 +1,35 @@
+use std::collections::HashMap;
+
 fn main() {
     let colors = ["Blue", "Green", "Red", "Silver"];
-    
-    car_factory(String::from(colors[0]), Transmission::Manual, false, 50);    
 
-    car_factory(String::from(colors[1]), Transmission::Automatic, true, 0);
+    let mut orders: HashMap<u32, Car> = HashMap::new();
 
-    car_factory(String::from(colors[2]), Transmission::SemiAuto, false, 5);
+    let mut car: Car;
+    let mut miles = 0;
+
+    for order in 1..6 {
+        car = car_factory(order, String::from(colors[0]), Transmission::Manual, false, miles);
+        orders.insert(order, car);
+
+        if miles > 20 {
+            miles = 0;
+        } else {
+            miles = miles + 5;
+        }
+
+    }
+
+    let order_id: u32 = 2;
+    println!("\nCar for order #{}: {:?}", order_id, orders.get(&order_id));
+
+    // let big_birds = ["ostrich", "peacock", "stork"];
+    // for bird in big_birds.iter() {
+    //     println!("The {} is a big bird.", bird);
+    // }
 }
 
+#[derive(PartialEq, Debug)]
 struct Car {
     color: String,
     motor: Transmission,
@@ -28,7 +50,7 @@ enum Age {
     Used,
 }
 
-fn car_factory(color: String, motor: Transmission, convertible: bool, miles: u32) -> Car {
+fn car_factory(order: u32, color: String, motor: Transmission, convertible: bool, miles: u32) -> Car {
     let car = Car {
         color,
         motor,
@@ -37,16 +59,15 @@ fn car_factory(color: String, motor: Transmission, convertible: bool, miles: u32
     };
 
     if car.age.0 == Age::Used {
-        println!("Preparing a used car: {}, {:?} motor, convertible: {} with mileage: {}", car.color, car.motor, car.convertible, car.age.1);
+        println!("Order #{}: preparing a used car: {}, {:?} motor, convertible: {} with mileage: {}", order, car.color, car.motor, car.convertible, car.age.1);
     } else {
-        println!("Preparing a new car: {}, {:?} motor, convertible: {} with mileage: {}", car.color, car.motor, car.convertible, car.age.1);
+        println!("Order #{}: preparing a new car: {}, {:?} motor, convertible: {} with mileage: {}", order, car.color, car.motor, car.convertible, car.age.1);
     }    
 
     return car;
 }
 
 fn car_quality(miles: u32) -> (Age, u32) {
-
     if miles == 0 {
         return (Age::New, miles);
     }
