@@ -1,40 +1,56 @@
-trait Area {
-    fn area(&self) -> f64;
+trait AsJson {
+    fn as_json(&self) -> String;
 }
 
-#[derive(Debug, PartialEq)]
-struct Circle {
-    radius: f64,
+struct Person {
+    name: String,
+    age: u8,
+    favorite_fruit: String,
 }
 
-#[derive(Debug, PartialEq)]
-struct Rectangle {
-    width: f64,
-    height: f64,
+struct Dog {
+    name: String,
+    color: String,
+    likes_petting: bool,
 }
 
-impl Area for Circle {
-    fn area(&self) -> f64 {
-        use std::f64::consts::PI;
-        PI * self.radius.powf(2.0)
+impl AsJson for Person {
+    fn as_json(&self) -> String {
+	    format!(
+	        r#"{{ "type": "person", "name": "{}", "age": {}, "favoriteFruit": "{}" }}"#,
+	        self.name, self.age, self.favorite_fruit
+	    )
     }
 }
 
-impl Area for Rectangle {
-    fn area(&self) -> f64 {
-        self.width * self.height
+impl AsJson for Dog {
+    fn as_json(&self) -> String {
+	    format!(
+	        r#"{{ "type": "dog", "name": "{}", "color": "{}", "likesPetting": {} }}"#,
+	        self.name, self.color, self.likes_petting
+	    )
     }
 }
+
+fn send_data_as_json(value: &impl AsJson) {
+    println!("Sending JSON data to server...");
+    println!("-> {}", value.as_json());
+    println!("Done!\n");
+}
+
 fn main() {
-    let circle = Circle { radius: 5.0 };
-    let rectangle = Rectangle {
-        width: 10.0,
-        height: 20.0,
+    let laura = Person {
+    	name: String::from("Laura"),
+	    age: 31,
+	    favorite_fruit: String::from("apples"),
     };
 
-    println!("Circle: {:?}", circle);
-    println!("Circle: {:?}", rectangle);
+    let fido = Dog {
+	    name: String::from("Fido"),
+	    color: String::from("Black"),
+	    likes_petting: true,
+    };
 
-    println!("Circle area: {}", circle.area());
-    println!("Rectangle area: {}", rectangle.area());
+    send_data_as_json(&laura);
+    send_data_as_json(&fido);
 }
