@@ -2,10 +2,12 @@ trait Area {
     fn area(&self) -> f64;
 }
 
+#[derive(Debug, PartialEq)]
 struct Circle {
     radius: f64,
 }
 
+#[derive(Debug, PartialEq)]
 struct Rectangle {
     width: f64,
     height: f64,
@@ -29,6 +31,9 @@ fn main() {
         width: 10.0,
         height: 20.0,
     };
+
+    println!("Circle: {:?}", circle);
+    println!("Circle: {:?}", rectangle);
 
     println!("Circle area: {}", circle.area());
     println!("Rectangle area: {}", rectangle.area());
