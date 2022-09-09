@@ -1,6 +1,9 @@
 use std::path::PathBuf;
 use structopt::StructOpt;
 
+/// cargo run -- -j test-journal.json list
+/// cargo run -- -j test-journal.json add "water the plants"
+/// cargo run -- -j test-journal.json done 2
 #[derive(Debug, StructOpt)]
 pub enum Action {
     Add {
