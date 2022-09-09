@@ -1,24 +1,11 @@
-use std::vec;
-
-fn copy_and_return<'names>(vector: &'names mut Vec<String>, value: &'names str) -> &'names String{
-    vector.push(String::from(value));
-
-    return vector.get(vector.len() - 1).unwrap();
+struct Point<T> {
+    x: T,
+    y: T,
 }
 
 fn main() {
-    let name1 = "Joe";
-    let name2 = "Chris";
-    let name3 = "Anne";
-
-    let mut names = Vec::new();
-
-    assert_eq!("Joe", copy_and_return(&mut names, &name1));
-    assert_eq!("Chris", copy_and_return(&mut names, &name2));
-    assert_eq!("Anne", copy_and_return(&mut names, &name3));
-
-    assert_eq!(
-        names,
-        vec!["Joe".to_string(), "Chris".to_string(), "Anne".to_string()]
-    )
+    let boolean = Point { x: true, y: false };
+    let integer = Point { x: 1, y: 9 };
+    let float = Point { x: 1.7, y: 4.3 };
+    let string_slice = Point { x: "high", y: "low" };
 }
