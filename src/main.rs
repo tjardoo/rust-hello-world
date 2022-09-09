@@ -1,32 +1,13 @@
-mod authentication {
-    pub struct User {
-        username: String,
-        password_hash: String,
-    }
-
-    impl User {
-        pub fn new(username: &str, password: &str) -> User {
-            User {
-                username: username.to_string(),
-                password_hash: password.to_string(),
-            }
-        }
-
-        pub fn get_username(&self) -> &String {
-            return &self.username;
-        }
-    
-        pub fn get_password(&self) -> &String {
-            return &self.password_hash;
-        }
-    }
-}
+mod authentication;
+use regex::Regex;
 
 fn main() {
-
     let user = authentication::User::new("jeremy", "super-secret");
 
     println!("The username is: {}", user.get_username());
     println!("The password is: {}", user.get_password());
 
+    let regex = Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap();
+
+    println!("Did our date match? {}", regex.is_match("2014-01-01"));
 }
