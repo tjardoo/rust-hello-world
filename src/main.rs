@@ -1,67 +1,32 @@
-struct Groups<T> {
-    inner: Vec<T>,
-}
-
-impl<T> Groups<T> {
-    fn new(inner: Vec<T>) -> Self {
-	    Groups { inner }
+mod authentication {
+    pub struct User {
+        username: String,
+        password_hash: String,
     }
-}
 
-impl<T: PartialEq> Iterator for Groups<T> {
-    type Item = Vec<T>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.inner.is_empty() {
-            return None;
-        }
-
-        let mut cursor = 1;
-
-        let first_element = &self.inner[0];
-
-        for element in &self.inner[1..] {
-            if element == first_element {
-                cursor = cursor + 1;
-            } else {
-                break;
+    impl User {
+        pub fn new(username: &str, password: &str) -> User {
+            User {
+                username: username.to_string(),
+                password_hash: password.to_string(),
             }
         }
 
-        let items = self.inner.drain(0..cursor).collect();
-
-        return Some(items);
+        pub fn get_username(&self) -> &String {
+            return &self.username;
+        }
+    
+        pub fn get_password(&self) -> &String {
+            return &self.password_hash;
+        }
     }
 }
 
 fn main() {
-    let data = vec![4, 1, 1, 2, 1, 3, 3, -2, -2, -2, 5, 5];
 
-    assert_eq!(
-	    Groups::new(data).into_iter().collect::<Vec<Vec<_>>>(),
-	    vec![
-	        vec![4],
-    	    vec![1, 1],
-	        vec![2],
-    	    vec![1],
-	        vec![3, 3],
-	        vec![-2, -2, -2],
-    	    vec![5, 5],
-	    ]
-    );
+    let user = authentication::User::new("jeremy", "super-secret");
 
-    let data2 = vec![1, 2, 2, 1, 1, 2, 2, 3, 4, 4, 3];
+    println!("The username is: {}", user.get_username());
+    println!("The password is: {}", user.get_password());
 
-    assert_eq!(
-	    Groups::new(data2).into_iter().collect::<Vec<Vec<_>>>(),
-	    vec![
-	        vec![1],
-    	    vec![2, 2],
-	        vec![1, 1],
-	        vec![2, 2],
-    	    vec![3],
-	        vec![4, 4],
-	        vec![3],
-	    ]
-    )
 }
