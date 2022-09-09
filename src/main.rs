@@ -1,56 +1,46 @@
-trait AsJson {
-    fn as_json(&self) -> String;
+#[derive(Debug)]
+struct Counter {
+    length: usize,
+    count: usize,
 }
 
-struct Person {
-    name: String,
-    age: u8,
-    favorite_fruit: String,
-}
-
-struct Dog {
-    name: String,
-    color: String,
-    likes_petting: bool,
-}
-
-impl AsJson for Person {
-    fn as_json(&self) -> String {
-	    format!(
-	        r#"{{ "type": "person", "name": "{}", "age": {}, "favoriteFruit": "{}" }}"#,
-	        self.name, self.age, self.favorite_fruit
-	    )
+impl Counter {
+    fn new(length: usize) -> Counter {
+	    Counter {
+	        count: 0,
+	        length,
+	    }
     }
 }
 
-impl AsJson for Dog {
-    fn as_json(&self) -> String {
-	    format!(
-	        r#"{{ "type": "dog", "name": "{}", "color": "{}", "likesPetting": {} }}"#,
-	        self.name, self.color, self.likes_petting
-	    )
-    }
-}
+impl Iterator for Counter {
+    type Item = usize;
 
-fn send_data_as_json(value: &impl AsJson) {
-    println!("Sending JSON data to server...");
-    println!("-> {}", value.as_json());
-    println!("Done!\n");
+    fn next(&mut self) -> Option<Self::Item> {
+    
+        self.count += 1;
+        if self.count <= self.length {
+            Some(self.count)
+        } else {
+            None
+        }
+    }
 }
 
 fn main() {
-    let laura = Person {
-    	name: String::from("Laura"),
-	    age: 31,
-	    favorite_fruit: String::from("apples"),
-    };
+    let mut counter = Counter::new(6);
+    
+    println!("Counter just created: {:#?}", counter);
 
-    let fido = Dog {
-	    name: String::from("Fido"),
-	    color: String::from("Black"),
-	    likes_petting: true,
-    };
+    assert_eq!(counter.next(), Some(1));
+    assert_eq!(counter.next(), Some(2));
+    assert_eq!(counter.next(), Some(3));
+    assert_eq!(counter.next(), Some(4));
+    assert_eq!(counter.next(), Some(5));
+    assert_eq!(counter.next(), Some(6));
+    assert_eq!(counter.next(), None);
+    assert_eq!(counter.next(), None);
+    assert_eq!(counter.next(), None);
 
-    send_data_as_json(&laura);
-    send_data_as_json(&fido);
+    println!("Counter exhausted: {:#?}", counter);
 }
